@@ -82,4 +82,3 @@ runs:
     with:
       message: ${{ steps.generate_comment.outputs.comment }}
       comment_tag: preview-url-comment
-      mode: recreate
