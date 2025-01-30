@@ -8,6 +8,10 @@ inputs:
   branch_preview_url:
     description: "Branch Preview URL"
     required: true
+  allowed_branch_patterns:
+    description: "Comma-separated list of branch prefixes that should trigger the action (use 'all' for no filtering)"
+    required: false
+    default: "all"
 
 outputs:
   comment_message:
@@ -17,8 +21,49 @@ outputs:
 runs:
   using: "composite"
   steps:
+  - name: Check if event is a pull request
+    id: check_event
+    shell: bash
+    run: |
+      if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+        echo "Not a pull request event. Skipping action."
+        exit 0
+      fi
+      echo "This is a pull request event."
+
+  - name: Check if PR head branch matches allowed patterns
+    id: check_branch
+    shell: bash
+    run: |
+      HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+      ALLOWED_PATTERNS="${{ inputs.allowed_branch_patterns }}"
+
+      if [[ "$ALLOWED_PATTERNS" == "all" ]]; then
+        echo "No branch filtering applied. Proceeding..."
+        exit 0
+      fi
+
+      MATCH=false
+      IFS=',' read -ra PATTERNS <<< "$ALLOWED_PATTERNS"
+      for pattern in "${PATTERNS[@]}"; do
+        if [[ "$HEAD_BRANCH" == "$pattern"* ]]; then
+          MATCH=true
+          break
+        fi
+      done
+
+      echo "Branch: $HEAD_BRANCH"
+      echo "Allowed Patterns: $ALLOWED_PATTERNS"
+      echo "Match: $MATCH"
+
+      if [[ "$MATCH" == "false" ]]; then
+        echo "Branch does not match allowed patterns. Skipping action."
+        exit 0
+      fi
+
   - name: Generate comment message
     id: generate_comment
+    shell: bash
     run: |
       {
         echo "comment<<EOF"
@@ -31,7 +76,6 @@ runs:
         echo "| **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |"
         echo "EOF"
       } >> "$GITHUB_OUTPUT"
-    shell: bash
 
   - name: Comment on PR
     uses: thollander/actions-comment-pull-request@v2
