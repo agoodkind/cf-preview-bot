@@ -46,6 +46,5 @@ runs:
       uses: thollander/actions-comment-pull-request@v2
       with:
         message: ${{ steps.generate_comment.outputs.comment }}
-        GITHUB_TOKEN: ${{ inputs.github_token }}
         comment_tag: preview-url-comment
         mode: recreate
