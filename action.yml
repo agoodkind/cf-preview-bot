@@ -21,18 +21,18 @@ runs:
       id: generate_comment
       shell: bash
       run: |
-        COMMENT<<EOF
-        ## 🚀 Deploying ${{ inputs.branch_name }} with ⚡ Cloudflare Pages
+        COMMENT=$(cat <<EOF
+        ## 🚀 Deploying ${{ github.ref_name }} with ⚡ Cloudflare Pages
 
-        | **Latest commit:** | \`${{ inputs.latest_commit }}\` |
+        | **Latest commit:** | \`${{ github.sha }}\` |
         |--------------------|----------------------|
         | **Status:**        | ✅ Deploy successful |
         | **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |
         | **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |
         EOF
+        )
 
         echo "comment=$COMMENT" >> "$GITHUB_OUTPUT"
-    
 
     - name: Comment on PR
       uses: thollander/actions-comment-pull-request@v2
@@ -40,4 +40,3 @@ runs:
         message: ${{ steps.generate_comment.outputs.comment }}
         comment_tag: preview-url-comment
         mode: recreate
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
