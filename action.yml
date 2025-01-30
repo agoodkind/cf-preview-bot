@@ -18,21 +18,21 @@ runs:
   using: "composite"
   steps:
    - name: Generate comment message
-      id: generate_comment
-      shell: bash
-      run: |
-        COMMENT<<EOF
-        ## 🚀 Deploying ${{ inputs.branch_name }} with ⚡ Cloudflare Pages
+     id: generate_comment
+     shell: bash
+     run: |
+       COMMENT<<EOF
+       ## 🚀 Deploying ${{ inputs.branch_name }} with ⚡ Cloudflare Pages
 
-        | **Latest commit:** | \`${{ inputs.latest_commit }}\` |
-        |--------------------|----------------------|
-        | **Status:**        | ✅ Deploy successful |
-        | **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |
-        | **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |
-        EOF
+       | **Latest commit:** | \`${{ inputs.latest_commit }}\` |
+       |--------------------|----------------------|
+       | **Status:**        | ✅ Deploy successful |
+       | **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |
+       | **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |
+       EOF
 
-        echo "comment=$COMMENT" >> "$GITHUB_OUTPUT"
-      
+       echo "comment=$COMMENT" >> "$GITHUB_OUTPUT"
+    
 
     - name: Comment on PR
       uses: thollander/actions-comment-pull-request@v2
@@ -40,4 +40,4 @@ runs:
         message: ${{ steps.generate_comment.outputs.comment }}
         comment_tag: preview-url-comment
         mode: recreate
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 這個還是需要，讓 action 具有留言權限
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
