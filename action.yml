@@ -2,15 +2,6 @@ name: "Comment Preview URL on PR"
 description: "Posts a comment on a PR with Cloudflare Pages deployment details"
 
 inputs:
-  github_token:
-    description: "GitHub token"
-    required: true
-  project_name:
-    description: "Project name"
-    required: true
-  latest_commit:
-    description: "Latest commit hash"
-    required: true
   deployment_url:
     description: "Deployment URL"
     required: true
@@ -29,9 +20,9 @@ runs:
     - name: Generate comment message
       id: generate_comment
       run: |
-        COMMENT="## 🚀 Deploying ${{ inputs.project_name }} with ⚡ Cloudflare Pages
+        COMMENT="## 🚀 Deploying ${{ github.head_ref }} with ⚡ Cloudflare Pages
 
-        | **Latest commit:** | \`${{ inputs.latest_commit }}\` |
+        | **Latest commit:** | \`${{ github.sha }}\` |
         |--------------------|----------------------|
         | **Status:**        | ✅ Deploy successful |
         | **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |
@@ -48,3 +39,4 @@ runs:
         message: ${{ steps.generate_comment.outputs.comment }}
         comment_tag: preview-url-comment
         mode: recreate
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 這個還是需要，讓 action 具有留言權限
