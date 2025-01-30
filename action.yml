@@ -33,9 +33,9 @@ runs:
       } >> "$GITHUB_OUTPUT"
     shell: bash
 
-    - name: Comment on PR
-      uses: thollander/actions-comment-pull-request@v2
-      with:
-        message: ${{ steps.generate_comment.outputs.comment }}
-        comment_tag: preview-url-comment
-        mode: recreate
+  - name: Comment on PR
+    uses: thollander/actions-comment-pull-request@v2
+    with:
+      message: ${{ steps.generate_comment.outputs.comment }}
+      comment_tag: preview-url-comment
+      mode: recreate
