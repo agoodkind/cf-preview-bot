@@ -24,7 +24,7 @@ runs:
         echo "comment<<EOF"
         echo "## 🚀 Deploying ${{ github.head_ref || github.ref_name }} with ⚡ Cloudflare Pages"
         echo ""
-        echo "| **Latest commit:** | \`${{ github.sha }}\` |"
+        echo "| **Latest commit:** | \`${{ github.event.pull_request.head.sha }}\` |"
         echo "|--------------------|----------------------|"
         echo "| **Status:**        | ✅ Deploy successful |"
         echo "| **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |"
