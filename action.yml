@@ -1,6 +1,10 @@
 name: "Comment Preview URL on PR"
 description: "Posts a comment on a PR with Cloudflare Pages deployment details"
 
+branding:
+  icon: "cloud"
+  color: "orange"
+
 inputs:
   deployment_url:
     description: "Deployment URL"
