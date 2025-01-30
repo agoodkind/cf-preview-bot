@@ -1,0 +1,25 @@
+name: 'Comment Preview URL on PR'
+description: 'Post a comment with deployment preview URLs on the related PR'
+author: 'Your Name'
+inputs:
+  github_token:
+    description: 'GitHub Token for authentication'
+    required: true
+  project_name:
+    description: 'Project name for deployment'
+    required: true
+  latest_commit:
+    description: 'The latest commit SHA'
+    required: true
+  deployment_url:
+    description: 'The deployment URL'
+    required: true
+  branch_preview_url:
+    description: 'The branch preview URL'
+    required: true
+outputs:
+  comment_id:
+    description: 'ID of the posted comment'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
