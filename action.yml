@@ -17,22 +17,21 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Generate comment message
-      id: generate_comment
-      shell: bash
-      run: |
-        COMMENT=$(cat <<EOF
-        ## 🚀 Deploying ${{ github.ref_name }} with ⚡ Cloudflare Pages
-
-        | **Latest commit:** | \`${{ github.sha }}\` |
-        |--------------------|----------------------|
-        | **Status:**        | ✅ Deploy successful |
-        | **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |
-        | **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |
-        EOF
-        )
-
-        echo "comment=$COMMENT" >> "$GITHUB_OUTPUT"
+  - name: Generate comment message
+    id: generate_comment
+    run: |
+      {
+        echo "comment<<EOF"
+        echo "## 🚀 Deploying ${{ github.head_ref || github.ref_name }} with ⚡ Cloudflare Pages"
+        echo ""
+        echo "| **Latest commit:** | \`${{ github.sha }}\` |"
+        echo "|--------------------|----------------------|"
+        echo "| **Status:**        | ✅ Deploy successful |"
+        echo "| **Preview URL:**   | [${{ inputs.deployment_url }}](${{ inputs.deployment_url }}) |"
+        echo "| **Branch Preview URL:** | [${{ inputs.branch_preview_url }}](${{ inputs.branch_preview_url }}) |"
+        echo "EOF"
+      } >> "$GITHUB_OUTPUT"
+    shell: bash
 
     - name: Comment on PR
       uses: thollander/actions-comment-pull-request@v2
