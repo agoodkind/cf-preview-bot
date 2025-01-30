@@ -1,4 +1,4 @@
-# Cloudflare Preview URL Commenter
+# Cloudflare Preview URL Comment Bot
 
 A GitHub Action that posts a comment on a Pull Request with Cloudflare Pages deployment details.
 
