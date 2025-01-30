@@ -1,4 +1,4 @@
-name: "Comment Preview URL on PR"
+name: "Comment Cloudflare Preview URL on PR"
 description: "Posts a comment on a PR with Cloudflare Pages deployment details"
 
 branding:
