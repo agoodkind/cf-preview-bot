@@ -46,7 +46,7 @@ jobs:
           wranglerVersion: '3'
 
       - name: Comment Preview URL on PR
-        uses: moojing/cloudflare-preview-url-commenter@main
+        uses: moojing/cf-preview-bot@v1
         with:
           deployment_url: ${{ steps.deploy.outputs.deployment-url }}
           branch_preview_url: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
@@ -88,7 +88,7 @@ If you only want to trigger the comment for specific branch prefixes, pass `allo
 
 ```yaml
       - name: Comment Preview URL on PR
-        uses: moojing/cloudflare-preview-url-commenter@main
+        uses: moojing/cf-preview-bot@v1
         with:
           deployment_url: ${{ steps.deploy.outputs.deployment-url }}
           branch_preview_url: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
