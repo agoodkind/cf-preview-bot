@@ -29,14 +29,16 @@ runs:
     id: check_event
     shell: bash
     run: |
-      if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+      if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+        echo "is_pr=true" >> $GITHUB_OUTPUT
+      else
+        echo "is_pr=false" >> $GITHUB_OUTPUT
         echo "Not a pull request event. Skipping action."
-        exit 0
       fi
-      echo "This is a pull request event."
 
   - name: Check if PR head branch matches allowed patterns
     id: check_branch
+    if: steps.check_event.outputs.is_pr == 'true'
     shell: bash
     run: |
       HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
@@ -67,6 +69,7 @@ runs:
 
   - name: Generate comment message
     id: generate_comment
+    if: steps.check_event.outputs.is_pr == 'true' && (steps.check_branch.outputs.branch_allowed == 'true' || steps.check_branch.outputs.branch_allowed == '')
     shell: bash
     run: |
       {
@@ -82,6 +85,7 @@ runs:
       } >> "$GITHUB_OUTPUT"
 
   - name: Comment on PR
+    if: steps.check_event.outputs.is_pr == 'true' && (steps.check_branch.outputs.branch_allowed == 'true' || steps.check_branch.outputs.branch_allowed == '')
     uses: thollander/actions-comment-pull-request@v2
     with:
       message: ${{ steps.generate_comment.outputs.comment }}
